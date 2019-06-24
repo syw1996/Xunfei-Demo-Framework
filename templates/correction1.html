@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}公文检错{% endblock %}
+
+{% block page_content %}
+
+
+<img src="{{ url_for('static', filename='xunfei-logo.jpg')}}" align="right" width="150" hspace="5" vspace="5">
+
+<link href="https://developer.mozilla.org/static/build/styles/wiki.29d8e48ff88c.css" rel="stylesheet" type="text/css" />
+
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="/static/files2/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/simple-line-icons.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/bootstrap-switch.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/toastr.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/daterangepicker.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/datatables.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/datatables.bootstrap.css" rel="stylesheet" type="text/css">
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="/static/files2/components.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/plugins.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/layout.min.css" rel="stylesheet" type="text/css">
+<link href="/static/files2/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color">
+<link href="/static/files2/global.css" rel="stylesheet" type="text/css">
+<!-- END THEME STYLES -->
+<link href="/static/files2/auto-complete.min.css" rel="stylesheet" type="text/css">
+<link href="/static/images/favicon.ico" rel="shortcut icon" />
+<link href="/static/files2/webuploader.css"  rel="stylesheet" type="text/css">
+<script src="/static/files2/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="/static/files2/bootstrap_v4.min.js" crossorigin="anonymous"></script>
+<script src="/static/files2/jquery.min.js" ></script> 
+<script src="/static/files2/bootstrap.min.js" ></script> 
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<div class="page-header">
+<h1>公文检错</h1>
+</div>
+
+<div style="padding: 8px;">
+{{ wtf.quick_form(form) }}
+</div>
+
+<div class='header'>
+    <h3>样例:</h3>
+</div>
+
+<div class="ref1-output">
+    {% if resp %}
+    <h4>检错文本:</h4>
+    <h4 id="content">{{ resp }}</h4>
+    <h4 id="mistake" style="display:none;">{{ mistake }}</h4>
+    <script type="text/javascript">
+        console.log(document.getElementById("content").innerHTML)
+        console.log(document.getElementById("mistake").innerHTML)
+        var str = document.getElementById("mistake").innerHTML;
+        //循环的分别赋样式
+        for (var i = 0; i < str.split(',').length; i++) {
+            var re = "/"+str.split(',')[i]+"/g";
+            //获取对象内容
+            var txt = document.getElementById("content").innerHTML;
+            //给符合要求的文本加上样式替换掉，eval解决转义问题
+            document.getElementById("content").innerHTML = txt.replace(eval(re),"<span style='color:red'>"+str.split(',')[i]+"</span>");
+        }
+	</script>
+    {% else %}
+    <h4>请输入原文本</h4>
+    {% endif %}
+</div>
+<style>
+    textarea.form-control {
+        height: 300px;
+    }
+    .ref1-output{
+    background: #86c7ff; 
+    width: 100%; 
+    padding: 8px;
+    font-size: 18px; 
+    color: #5f84a8; 
+    border: 1px #d7edff solid; 
+    border-radius: 5px; 
+    margin: 0px 0px 7px 0px;
+    box-shadow:5px 5px 10px gray;
+    background: -webkit-linear-gradient(left,#d7edff, #a7d6ff); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right,#d7edff, #a7d6ff); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right,#d7edff, #a7d6ff); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#d7edff, #a7d6ff); /* 标准的语法（必须放在最后） */}
+</style>
+
+
+{% if json %}
+	<div class="container-fluid page-contents">
+            <div id="showInstrumentError" class="show-instrument-error show-content-container" style="display: block;">
+                <form id="hideNameForm" type="post" target="_self" method="post">
+                    <input type="hidden" id="hideNameInput" name="instrumentStr" value="">
+                </form>
+                <div class="row">
+                    <div class="col-md-12" id="errorFinderResult">
+                        <div class="col-md-7" id="instrumentSegments">
+                            <div class="instrument-detail-container">
+                                <div class="error-instument-detail" style="height: 88%; overflow: auto;">
+                                    {% for line in raw_text %}
+                                    <p class="instrument-segment song-p" data-key="{{loop.index}}" style='white-space:pre-wrap; font-family:"Microsoft yahei"'><span class="badge badge-primary mark-segment">{{loop.index}}</span> {{line}}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="portlet box red">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        纠错结果
+                                    </div>
+                                    <div class="tools"></div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="panel-group accordion scrollable error-items-container" id="instrumentErrorList" style="max-height: 73%; overflow: auto;">
+
+                                        <div class="portlet-body">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle cursor-default"> 错别字审查 </a>
+                                                </h4>
+                                            </div>
+ 
+                                            <div class="panel-collapse in">
+                                                <div class="panel-body error-panel-body">
+                                                    <div class="description-list-container ">
+                                                        <div class="error-list">
+                                                            {% for item in json %}
+                                                            {% if item %}
+                                                            <div class="text-primary description-title cursor-default" style="font-size: 16px;">
+                                                                <span class="error-list-label">{{loop.index}}.&nbsp</span>
+                                                                <span class="badge badge-danger error-item-badge"> 疑似别字 </span>
+                                                                <!--<span class="badge badge-warning error-item-badge"> 提示 </span>-->
+                                                                {% if item[0] != "" %}
+                                                                    <span style='color:red;'>{{item[0][2]}}</span> <span style='color:black'>&rarr;</span> {{item[0][3]}}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="error-item instrument-error0" data-key="{{item[0][0]}}" data-pos="{{item[0][1]}}" data-position-start="0" data-error-level="2" data-position-end="4" data-segment-no="5" data-class-name="instrument-error0">
+                                                                错误位置：第{{item[0][0]}}行, 第{{ item[0][1] }}个字
+                                                                <br>
+                                                            </div>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<style>
+		.col-md-12,.col-md-7{
+			margin:0;
+			padding:0;
+		}
+		.col-md-5{
+			padding-right:0;
+		}
+		.panel-body{padding:0;}
+		@media screen and (max-width: 992px) {
+			.col-md-5{
+				padding-right:0;
+				padding-left:0;
+			}
+		}
+		</style>
+        <script>
+        window.onload = function() {
+            $('#myTab a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+            $('.collapse').collapse()
+            var $leftContainer = document.querySelector('.error-items-container');
+            $leftContainer.addEventListener('click', function(e) {
+            //获取事件对象
+                var $target = e.target;
+				debugger;
+                //拿到选中的key
+                var key = $target.dataset.key
+                if (!key) {
+                    $target = $target.closest('.error-item')
+                    key = $target.dataset.key
+                }
+                var pos = $target.dataset.pos
+                var is_clause = $target.dataset.clause
+                var is_element = $target.dataset.element
+                var rname = $target.dataset.rname
+                var stat = $target.dataset.status
+
+                //获取上次选中的元素
+                var $lastSelected = document.querySelectorAll('.instrument-segment[data-selected="true"]')
+                if(!!$lastSelected) {
+                    //取消之前的选中
+                    $lastSelected.forEach(function($dom, index) {
+                        $dom.dataset.selected = 'false'
+                        $dom.querySelectorAll('.error').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('error-word');
+                        })
+                        $dom.querySelectorAll('.element-tt-pass').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-tt-pass');
+                        })
+                        $dom.querySelectorAll('.element-tt-danger').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-tt-danger');
+                        })
+                        $dom.querySelectorAll('.element-tt-warning').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-tt-warning');
+                        })
+                        $dom.querySelectorAll('.element-cc-pass').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-cc-pass');
+                        })
+                        $dom.querySelectorAll('.element-cc-danger').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-cc-danger');
+                        })
+                        $dom.querySelectorAll('.element-cc-warning').forEach(function($err, idx){
+                            // console.log($err)
+                            $err.classList.remove('element-cc-warning');
+                        })
+                        $dom.style.color='#000';
+                    })
+                }
+                if (is_element) {
+                     //获取右边相应的节点
+                    key.split(',').forEach(function(line_idx, idx) {
+                        var $targetRight = document.querySelectorAll('.instrument-segment[data-key="'+ line_idx +'"]')
+
+                        if(!!$targetRight) {
+                            //将选中的右边元素标示一下
+                            $targetRight.forEach(function($dom, index) {
+                                $dom.dataset.selected = 'true'
+                                $dom.style.color='#dc3545';
+                                var $eleLabelTarget = $dom.getElementsByClassName('element-label-' + rname);
+                                Array.from($eleLabelTarget).forEach(function($eleLabel, i) {
+                                    if (stat == 0)
+                                        $eleLabel.classList.add('element-tt-pass');
+                                    else if(stat == 1)
+                                        $eleLabel.classList.add('element-tt-danger');
+                                    else if(stat == 2)
+                                        $eleLabel.classList.add('element-tt-warning');
+                                    $dom.style.color='#000';
+                                })
+                                var $eleContentTarget = $dom.getElementsByClassName('element-content-' + rname);
+                                Array.from($eleContentTarget).forEach(function($eleContent, i) {
+                                    if (stat == 0)
+                                        $eleContent.classList.add('element-cc-pass');
+                                    else if(stat == 1)
+                                        $eleContent.classList.add('element-cc-danger');
+                                    else if(stat == 2)
+                                        $eleContent.classList.add('element-cc-warning');
+                                    $dom.style.color='#000';
+                                })
+                                if(idx == 0 && index === 0) {
+                                    $dom.scrollIntoView(true)
+                                }
+                            })
+                        //$targetRight.style.color='red'
+                        }
+                    })
+                    // console.log(is_element)
+                    // console.log(rname)
+                    // console.log('--------')
+                } else if (is_clause) {
+                    //获取右边相应的节点
+                    var status = $target.dataset.status
+                    key.split(',').forEach(function(line_idx, idx) {
+                        var $targetRight = document.querySelectorAll('.instrument-segment[data-key="'+ line_idx +'"]')
+                        // console.log($targetRight)
+                        if(!!$targetRight) {
+                            //将选中的右边元素标示一下
+                            $targetRight.forEach(function($dom, index) {
+                                $dom.dataset.selected = 'true'
+                                if (status == 0) {
+                                    $dom.style.color='#28a745';
+                                } else if (status == 1) {
+                                    $dom.style.color='#dc3545';
+                                } else if (status == 2) {
+                                    $dom.style.color='#ffc107';
+                                }
+                                if(idx == 0 && index === 0) {
+                                    $dom.scrollIntoView(true)
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    //获取右边相应的节点
+                    var $targetRight = document.querySelectorAll('.instrument-segment[data-key="'+ key +'"]')
+
+                    if(!!$targetRight) {
+                        //将选中的右边元素标示一下
+                        $targetRight.forEach(function($dom, index) {
+                            $dom.dataset.selected = 'true'
+                            $dom.style.color='#dc3545';
+                            if (pos) {
+                                console.log('error-' + pos)
+                                var $errorTarget = $dom.getElementsByClassName('error error-' + pos)[0];
+                                if ($errorTarget) {
+                                    $errorTarget.classList.add('error-word');
+                                    $dom.style.color='#555555';
+                                }
+                            }
+                            if(index === 0) {
+                                $dom.scrollIntoView(true)
+                            }
+                        })
+                    //$targetRight.style.color='red'
+                    }
+                }
+            })
+        }
+    </script>
+	{% endif%}
+	{% endblock %}

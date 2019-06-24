@@ -1,0 +1,55 @@
+{% extends "bootstrap/base.html" %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar" style="display:none"></span>
+                <span class="icon-bar" style="display:none"></span>
+                <span class="icon-bar" style="display:none"></span>
+            </button>
+            <a class="navbar-brand" href="/">公文生成</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                <!-- <li><a href="/summary">会议纪要</a></li>
+                 -->
+                 <li><a href="/template">公文模板</a></li>
+                 <li><a href="/search">公文检索</a></li>
+                <li><a href="/correction">公文检错</a></li>
+                
+                
+                <li><a href="http://39.100.136.213:45800/zuowen/">内容生成</a >
+
+		         <!--  <li><a href="/doc">新闻改写</a></li>
+ -->
+            </ul>
+        </div>
+    </div>
+</div>
+<style>
+.container-fluid>.navbar-collapse, .container-fluid>.navbar-header, .container>.navbar-collapse, .container>.navbar-header{margin-left: 0;margin-right: 0}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{border:0}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ message }}
+</div>
+{% endfor %}
+
+{% block page_content %}{% endblock %}
+</div>
+
+{% endblock %}

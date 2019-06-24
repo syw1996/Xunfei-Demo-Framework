@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}公文改错{% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='xunfei-logo.jpg')}}" align="right" width="150" hspace="5" vspace="5">
+
+<link href="https://developer.mozilla.org/static/build/styles/wiki.29d8e48ff88c.css" rel="stylesheet" type="text/css" />
+
+<div class="page-header">
+<h1>公文改错</h1>
+</div>
+
+{{ wtf.quick_form(form) }}
+
+
+<div class="ref1-output">
+    {% if resp %}
+    <h4>改错文本:</h4>
+    <h4 id="content">{{ resp }}</h4>
+    <h4 id="mistake" style="display:none;">{{ mistake }}</h4>
+    <script type="text/javascript">
+        console.log(document.getElementById("content").innerHTML)
+        console.log(document.getElementById("mistake").innerHTML)
+        var str = document.getElementById("mistake").innerHTML;
+        //循环的分别赋样式
+        for (var i = 0; i < str.split(',').length; i++) {
+            var re = "/"+str.split(',')[i]+"/g";
+            //获取对象内容
+            var txt = document.getElementById("content").innerHTML;
+            //给符合要求的文本加上样式替换掉，eval解决转义问题
+            document.getElementById("content").innerHTML = txt.replace(eval(re),"<span style='color:red'>"+str.split(',')[i]+"</span>");
+        }
+	</script>
+    {% else %}
+    <h4>请输入原文本</h4>
+    {% endif %}
+</div>
+<style>
+    textarea.form-control {
+        height: 200px;
+    }          
+    .ref1-output{
+    background: #86c7ff; 
+    width: 100%; 
+    padding: 8px;
+    font-size: 18px; 
+    color: #5f84a8; 
+    border: 1px #d7edff solid; 
+    border-radius: 5px; 
+    margin: 0px 0px 7px 0px;
+    box-shadow:5px 5px 10px gray;
+    background: -webkit-linear-gradient(left,#d7edff, #a7d6ff); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right,#d7edff, #a7d6ff); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right,#d7edff, #a7d6ff); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#d7edff, #a7d6ff); /* 标准的语法（必须放在最后） */}
+</style>
+
+{% endblock %}

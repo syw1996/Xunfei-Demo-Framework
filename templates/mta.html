@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}主题作文 {% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='logo.png')}}" align="right" width="150" hspace="5" vspace="5">
+
+<div class="page-header">
+<h1>主题作文生成</h1>
+</div>
+
+{{ wtf.quick_form(form) }}
+
+<div class="lstm-output">
+    <h5>样例:</h5>
+    <h5>知识 老师 照亮 前进 园丁</h5>
+    {% if essay %}
+    <h4>生成作文:</h4>
+    <h4> {{ essay }} </h4>
+    {% else %}
+    <h4>请输入主题词</h4>
+    {% endif %}
+</div>
+
+{% endblock %}

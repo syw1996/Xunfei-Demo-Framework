@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}公文模板 {% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='xunfei-logo.jpg')}}" align="right" width="150" hspace="5" vspace="5">
+
+<div class="page-header">
+<h1>公文模板</h1>
+</div>
+
+{{ wtf.quick_form(form) }}
+
+<div class="outputs-header" >
+    <label class="control-label" style="padding-top: 8px;padding-bottom: 8px;">模板展示</label>
+</div>
+
+<link href="https://developer.mozilla.org/static/build/styles/wiki.29d8e48ff88c.css" rel="stylesheet" type="text/css" />
+<link href="https://developer.mozilla.org/static/build/styles/locale-zh-CN.bd1628bd7474.css" rel="stylesheet" type="text/css" />
+
+<div class="outputs">
+
+    {% if templ %}
+    <strong><h2 style="text-align:center;"><font font size="5" >{{ head }}</font></h2></strong>
+    <h4 style="white-space:pre-wrap; "><font font size="3">{{ templ }}</font></h4>
+    <h4 style="text-align:right;"><font font size="3" >{{ end1 }}</font></h4>
+    <h4 style="text-align:right;"><font font size="3">{{ end2 }}</font></h4>
+     <h4 style="text-align:left"><font font size="3" >{{ extra }}</font></h4>
+    {% else %}
+    <h4>请选择模板</h4>
+    {% endif %}
+</div>
+
+
+<style>
+    .outputs{
+    word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
+    background: #86c7ff;
+    width: 100%;
+    padding: 8px;
+    font-size: 18px;
+    border: 1px #d7edff solid;
+    border-radius: 5px;
+    margin: 0px 0px 7px 0px;
+    box-shadow:5px 5px 10px gray;
+    background: -webkit-linear-gradient(left,#d7edff, #a7d6ff); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right,#d7edff, #a7d6ff); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right,#d7edff, #a7d6ff); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#d7edff, #a7d6ff); /* 标准的语法（必须放在最后） */}
+</style>
+
+
+{% endblock %}

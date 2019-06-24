@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}公文检索 {% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='xunfei-logo.jpg')}}" align="right" width="150" hspace="5" vspace="5">
+
+<link href="https://developer.mozilla.org/static/build/styles/wiki.29d8e48ff88c.css" rel="stylesheet" type="text/css" />
+
+<div class="page-header">
+<h1>公文检索</h1>
+</div>
+
+{{ wtf.quick_form(form) }} 
+
+{% if post %}
+<h4>搜索关键词:</h4>
+<div class="standardNoteBlock">
+    <h4> {{ post }}</h4>
+</div>
+{% endif %}
+
+{% if results %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row " style="margin-top: 10px">
+                {% for d in results %}
+                    <a href={{ d[0] }}> <h4>{{ d[1] }}</h4> </a>
+                    <h5> {{ d[2] }} </h5>
+                {% endfor %}
+                <nav aria-label="Page navigation" class="pull-right">
+                    <ul class="pagination">
+                        {{ html|safe }}
+                    </ul>
+                </nav>
+        </div>
+    </div>
+</body>
+{% else %}
+<h4>请输入检索关键词</h4>
+{% endif %}
+
+{% endblock %}

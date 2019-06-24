@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}人物描写 {% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='logo.png')}}" align="right" width="150" hspace="5" vspace="5">
+
+<div class="page-header">
+<h1>人物描写生成 </h1>
+</div>
+
+{{ wtf.quick_form(form) }}
+
+<h5>样例:</h5>
+<h5>爱丽丝 柔顺 一身 米色 洋装 精致 肌肤</h5>
+
+<div class="lstm-header">
+    <h3>LSTM Seq2Seq</h3>
+</div>
+
+<div class="lstm-output">
+    {% if port1 %}
+    <h4>Generated Portrayal:</h4>
+    <h4> {{ port1 }} </h4>
+    {% else %}
+    <h4>请输入关键词</h4>
+    {% endif %}
+</div>
+
+<hr>
+
+<div class="transformer-header">
+    <h3>Transformer Seq2Seq</h3>
+</div>
+
+<div class="transformer-output">
+    {% if port2 %}
+    <h4>Generated Portrayal:</h4>
+    <h4> {{ port2 }} </h4>
+    {% else %}
+    <h4>请输入关键词</h4>
+    {% endif %}
+</div>
+
+{% endblock %}

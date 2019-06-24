@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}新闻改写 {% endblock %}
+
+{% block page_content %}
+
+<img src="{{ url_for('static', filename='xunfei-logo.jpg')}}" align="right" width="150" hspace="5" vspace="5">
+
+<link href="https://developer.mozilla.org/static/build/styles/wiki.29d8e48ff88c.css" rel="stylesheet" type="text/css" />
+
+<div class="page-header">
+<h1>新闻改写 </h1>
+</div>
+
+{{ wtf.quick_form(form) }}
+
+<div class='header'>
+    <h3>样例:</h3>
+</div>
+
+<div class="ref1-output">
+    {% if docs %}
+    <h4>生成新闻1:</h4>
+    <h4> {{ docs[0] }} </h4>
+    <h4>参考新闻1:</h4>
+    <h4> {{ refs[0] }} </h4>
+    {% else %}
+    <h4>请输入标题以及标签</h4>
+    {% endif %}
+</div>
+<style>        
+    .ref1-output{
+    background: #86c7ff; 
+    width: 100%; 
+    padding: 8px;
+    font-size: 18px; 
+    color: #5f84a8; 
+    border: 1px #d7edff solid; 
+    border-radius: 5px; 
+    margin: 0px 0px 7px 0px;
+    box-shadow:5px 5px 10px gray;
+    background: -webkit-linear-gradient(left,#d7edff, #a7d6ff); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right,#d7edff, #a7d6ff); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right,#d7edff, #a7d6ff); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#d7edff, #a7d6ff); /* 标准的语法（必须放在最后） */}
+</style>
+
+<hr>
+
+<div class="ref2-output">
+    {% if docs %}
+    <h4>生成新闻2:</h4>
+    <h4> {{ docs[1] }} </h4>
+    <h4>参考新闻2:</h4>
+    <h4> {{ refs[1] }} </h4>
+    {% else %}
+    <h4>请输入标题以及标签</h4>
+    {% endif %}
+</div>
+<style>
+    .ref2-output{
+    background: #fdd4b5; 
+    width: 100%; 
+    padding: 8px;
+    font-size: 18px; 
+    color: #5f84a8; 
+    border: 1px #e7daca solid; 
+    border-radius: 5px;
+    margin: 0px 0px 7px 0px; 
+    box-shadow:5px 5px 10px gray;
+    background: -webkit-linear-gradient(left, #e7daca, #ffc987); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, #e7daca, #ffc987); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, #e7daca, #ffc987); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #e7daca, #ffc987); /* 标准的语法（必须放在最后） */} 
+</style>
+
+{% endblock %}

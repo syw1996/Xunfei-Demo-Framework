@@ -16,3 +16,13 @@ uwsgi demo_uwsgi.ini
 ## Page Examples
 ### Home page:
 ![image](https://github.com/syw1996/Xunfei-Demo-Framework/blob/master/img/home.jpg)
+
+### Template page:
+![image](https://github.com/syw1996/Xunfei-Demo-Framework/blob/master/img/template.jpg)
+
+### Correction page:
+![image](https://github.com/syw1996/Xunfei-Demo-Framework/blob/master/img/correction1.jpg)
+![image](https://github.com/syw1996/Xunfei-Demo-Framework/blob/master/img/correction2.jpg)
+
+### Generation page:
+![image](https://github.com/syw1996/Xunfei-Demo-Framework/blob/master/img/generation.jpg)
